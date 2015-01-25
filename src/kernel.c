@@ -19,9 +19,9 @@ void printChar(char c)
 
 void printString(char *ptr) 
 {
-  while (*ptr != '\0') { 
-    printChar(*ptr);
-    *ptr++;
+  while ((char)*ptr != '\0') { 
+    printChar((char)*ptr);
+    ptr++;
   }
 
   return;
@@ -29,7 +29,6 @@ void printString(char *ptr)
 
 void main(void)
 {
-  char *kernelHello = "Welcome to Piquant, please wait while Kernel boots...\n";
-  printString(kernelHello);
+  //printString("Piquant Kernel v0.1\n");
   while(1);
 }

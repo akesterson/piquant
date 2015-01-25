@@ -1,0 +1,4 @@
+_extern_c_main:
+    jmp 0x1000:0x0049
+_extern_c_printCh:
+    jmp 0x1000:0x0000
