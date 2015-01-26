@@ -2,6 +2,10 @@
 [org 0x7C00]                   ; Origin at 0x7C00 (upper end of memory)
 
 start:
+	;; FIXME - we need to relocate ourselves to the
+	;; upper end of memory somewhere so we can overwrite
+	;; ourselves with the kernel at 0x0000
+	
 	call blankScreen
 
 	mov dx, 0x0
@@ -13,10 +17,10 @@ start:
 	mov dl, 0x0
 	call setCursorPosition
 	
-	mov al, 0x1            ; read the remaining 16 tracks 
+	mov al, 0x10           ; read the remaining 16 tracks 
 	mov ch, 0x0            ; .... on track 0 ....
 	mov cl, 0x2            ; .... starting at sector 2
-	mov bx, 0x1000         ; 0x1000 is a standard kernel start location
+	mov bx, 0x1000         ; Load the kernel into the bottom of memory
 	mov es, bx
 	mov bx, 0x0            ; bx = 0, es:bx = 0x1000:0
 	call loadFloppyDiskSectors
@@ -58,6 +62,11 @@ _end_floppy_read:
 	call setCursorPosition
 	mov si, _str_floppydone
 	call printString
+	mov ax, 0x1000
+	mov ds, ax
+	mov ax, 0x1000
+	mov ss, ax
+	mov sp, 0xFFFF
 	jmp _extern_c_main
 
 %include "libinterrupt.S"
@@ -69,4 +78,3 @@ _end_floppy_read:
 
 times 510 - ($ - $$) db 0      ; fill up to 510 bytes with 0
 dw 0xAA55                      ; magic bootloader signature
-
