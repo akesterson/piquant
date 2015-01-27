@@ -3,7 +3,7 @@ all: boot.img kernel.bin
 src/%.o: src/%.c
 	bcc -ansi -0 -c -o $@ $<
 
-kernel.bin: src/kernel.o
+kernel.bin: src/screen.o src/conio.o src/string.o src/stdlib.o src/basic.o src/kernel.o
 	ld86 -d -M -o $@ $^ | tee ld86.out
 
 asm/kernel_syms.S: kernel.bin
