@@ -197,7 +197,21 @@ struct basic_expr *basic_parse_expr(char *expbuf)
   return ret;
 }
 
-void basic_run(void)
+void basic_print_var(struct basic_variable *var)
+{
+  char decimal[2];
+  decimal[0] = 0;
+  decimal[1] = 0;
+
+  if ( ( (var->flags & BASIC_VARFLAG_INIT) == BASIC_VARFLAG_INIT ) &&
+       ( (var->flags & BASIC_VARFLAG_TINT) == BASIC_VARFLAG_TINT ) ) {
+    decimal[0] = dtoa((int)var->value);
+    _cputs(&decimal);
+    _cputs("\n");
+  }
+}
+
+void basic_repl(void)
 {
   char keybuff[512];
   char outbuff[128];
@@ -224,9 +238,6 @@ void basic_run(void)
     memset((void *)&outbuff, 0x00, 128);
     if ( _cgets((char *)&keybuff) != NULL ) {
       _cputs("\n");
-      _cputs("Analyzing ");
-      _cputs((char *)&keybuff);
-      _cputs("\n");
 
       expr = basic_parse_expr((char *)&keybuff);
       if ( expr == NULL ) {
@@ -238,26 +249,6 @@ void basic_run(void)
 	continue;
       }
 
-      /* Debug */
-
-      decimal[0] = dtoa(expr->type);
-      memcpy(&outbuff, "Expression type: \0", strlen("Expression type: \0"));
-      strncat(&outbuff, &decimal, 1);
-      _cputs(&outbuff);
-      _cputs("\n");
-
-      decimal[0] = dtoa(expr->lval);
-      memcpy(&outbuff, "Expression lval: \0", strlen("Expression lval: \0"));
-      strncat(&outbuff, &decimal, 1);
-      _cputs(&outbuff);
-      _cputs("\n");
-
-      decimal[0] = dtoa(expr->rval);
-      memcpy(&outbuff, "Expression rval: \0", strlen("Expression rval: \0"));
-      strncat(&outbuff, &decimal, 1);
-      _cputs(&outbuff);
-      _cputs("\n");
-
       /* Evaluate */
       basic_solve_expr(expr, &result);
       if ( basic_errno != 0 ) {
@@ -266,12 +257,7 @@ void basic_run(void)
 	_cputs(&decimal);
 	_cputs("\n");
       } else {
-	if ( ( (result.flags & BASIC_VARFLAG_INIT) == BASIC_VARFLAG_INIT ) &&
-	     ( (result.flags & BASIC_VARFLAG_TINT) == BASIC_VARFLAG_TINT ) ) {
-	  decimal[0] = dtoa((int)result.value);
-	  _cputs(&decimal);
-	  _cputs("\n");
-	}
+	basic_print_var(&result);
       }
     }
   }

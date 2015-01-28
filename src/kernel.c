@@ -4,5 +4,5 @@
 
 void main(void)
 {
-  basic_run();
+  basic_repl();
 }

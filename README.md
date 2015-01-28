@@ -11,11 +11,11 @@ Because it's fun. Don't you like to have fun? Ogre.
 What does it do?
 =====
 
-Right now, not much of anything at all. It boots from a 1.44mB floppy disk, throws some text to the screen, and enters a primitive REPL (where you can do nothing but display a help message, HALT the machine, or RESET the machine).
+Right now, not much of anything at all. It boots from a 1.44mB floppy disk, and enters into a BASIC interpreter, just like your favorite home computers of the 70s/80s!
 
 ![Image of Piquant v0.1](media/screenshot.png)
 
-I think I'm going to expand the basic REPL into a BASIC interpreter, just like the classic machines of the 80s. "Operating System? Oh, you mean the BASIC ROM, right?" :)
+Currently the BASIC only understands simple, 1-digit arithmetic expressions. But this will soon change; I intend to implement at least as many features as uBASIC, maybe QuickBASIC eventually.
 
 How can I run it?
 =====

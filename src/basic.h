@@ -58,6 +58,6 @@ struct basic_variable {
 
 extern int basic_errno;
 
-void run_basic(void);
+void basic_repl(void);
 
 #endif /* _BASIC_H_ */
