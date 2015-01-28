@@ -17,9 +17,10 @@ void _tokenizer_init(void)
   _tokenizer_prev_next = NULL;
 }
 
-char *_tokenize(char *ptr, char token)
+char *_tokenize(char *ptr, char *token)
 {
   char *orig = NULL;
+  char *tokenptr = NULL;
   int len = 0;
 
   if ( ptr == NULL ) {
@@ -31,13 +32,23 @@ char *_tokenize(char *ptr, char token)
   orig = ptr;
 
   memset(&_tokenizer_value, 0x00, BASIC_TOKENIZER_MAX_LENGTH);
-  while ( *ptr != token ) {
-    if ( *ptr == '\0' ) {
-      ptr -= sizeof(char);
+  while ( *ptr != 0x0 ) {
+    tokenptr = token;
+
+    /* I don't understand why this works. It shouldn't work. */
+    while ( *tokenptr != 0x0 && (*ptr == *tokenptr++) ) {};
+    /* ----------------------------------------------------- */
+
+    if ( *tokenptr == 0x00 ) {
       break;
+    } else {
+      if ( *ptr == '\0' ) {
+	ptr -= sizeof(char);
+	break;
+      }
+      ptr += sizeof(char);
+      len += 1;
     }
-    ptr += sizeof(char);
-    len += 1;
   }
   if ( len > BASIC_TOKENIZER_MAX_LENGTH ) {
     basic_errno = BASIC_ERR_SYNTAX_TOKEN_LENGTH;
@@ -152,14 +163,14 @@ struct basic_expr *basic_parse_expr(char *expbuf)
 	basic_errno = BASIC_ERR_SYNTAX_MULTIPLE_LVALUES;
 	return NULL;
       } else if ( ret->type == 0x0 ) {
-	ret->lval = atoi(_tokenize(expbuf, ' '));
+	ret->lval = atoi(_tokenize(expbuf, BASIC_TOKENIZER_TOKENS));
 	ret->lval_type = BASIC_LVAL_CONST;
 	flags = (flags + BASIC_FOUND_LVAL);
       } else if ( ret->type != 0x0 && ((flags & BASIC_FOUND_RVAL) == BASIC_FOUND_RVAL)) {
 	basic_errno = BASIC_ERR_SYNTAX_MULTIPLE_RVALUES;
 	return NULL;
       } else if ( ret->type != 0x0 ) {
-	ret->rval = atoi(_tokenize(expbuf, ' '));
+	ret->rval = atoi(_tokenize(expbuf, BASIC_TOKENIZER_TOKENS));
 	ret->rval_type = BASIC_RVAL_CONST;
       }
     } else if ( ret->type == 0x0 ) {
