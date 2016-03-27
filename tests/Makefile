@@ -1,11 +1,13 @@
+CFLAGS:=-ffreestanding -fno-builtin -I../src -ansi -Wall -Werror
+
 %.o: %.c
-	gcc -I../src -ansi -Wall -Werror -c -o $@ $<
+	gcc $(CFLAGS) -c -o $@ $<
 	for file in $$(cat $$(echo $@ | sed 's/\.o$$//').deps); do \
-		gcc -I../src -ansi -Wall -Werror -c -o ./$${file}.o ../src/$$file.c ; \
+		gcc $(CFLAGS) -c -o ./$${file}.o ../src/$$file.c ; \
 	done
 
 %.elf: %.o
-	gcc -o $@ $^ $$(cat $$(echo $@ | sed 's/\.elf$$//').deps | sed 's/$$/\.o/g')
+	gcc $(CFLAGS) -o $@ $^ $$(cat $$(echo $@ | sed 's/\.elf$$//').deps | sed 's/$$/\.o/g')
 
 
 all_targets:=$(shell ls *c | sed 's/\.c$$/\.elf/g')
