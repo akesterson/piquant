@@ -1,5 +1,4 @@
-.. |Build Status| image:: https://travis-ci.org/akesterson/piquant.svg?branch=travisci
-   :target: https://travis-ci.org/akesterson/piquant
+[![Build Status](https://travis-ci.org/akesterson/piquant.svg?branch=master)](https://travis-ci.org/akesterson/piquant)
 
 Piquant
 ====
