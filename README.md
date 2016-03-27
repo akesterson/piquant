@@ -38,6 +38,10 @@ This will rebuild all of the sources and fire up the bochs emulator. Have fun.
 Developing & Testing
 =======
 
-To run the unit tests:
+You need gcc to run the unit tests. To run the unit tests:
 
     make test
+
+Keep in mind that the unit tests are compiled with gcc, not bcc, as I couldn't find an elegant way to make bcc produce objects that could easily be run in linux (especially Travis-CI). So while the tests are an accurate test of the C code under ANSI spec, they make no promises re: what bcc is eventually going to do with that code.
+
+New unit tests are created by making a new *.c file in tests/. Drop the name of whatever portions of piquant it relies on into a '.deps' file. Look at the others for examples.
