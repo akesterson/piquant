@@ -32,7 +32,7 @@ run: boot.img
 
 .PHONY: test
 test:
-	cd tests && make clean && ../dependencies/bin/shunit.sh -f $(TEST_FORMAT) -t test.sh
+	cd tests && make clean && ../dependencies/bin/shunit.sh -f $(TEST_FORMAT) -t test.sh ; exit $$?
 
 .PHONY: clean
 clean:

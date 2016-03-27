@@ -54,3 +54,5 @@ do
 done
 
 ${FORMATTER}_footer
+
+exit $(expr ${SHUNIT_FAILURES} + ${SHUNIT_ERRORS})
