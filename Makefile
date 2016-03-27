@@ -1,3 +1,7 @@
+ifeq ($(TEST_FORMAT),)
+	TEST_FORMAT:=tunit
+endif
+
 all: boot.img kernel.bin
 
 src/%.o: src/%.c
@@ -23,8 +27,12 @@ boot.img: boot.bin kernel.bin
 	dd if=boot.tmp of=boot.img conv=notrunc
 	rm -f boot.tmp
 
-test: boot.img
+run: boot.img
 	bochs -f bochsrc -q
+
+.PHONY: test
+test:
+	cd tests && make clean && shunit.sh -f $(TEST_FORMAT) -t test.sh
 
 .PHONY: clean
 clean:
