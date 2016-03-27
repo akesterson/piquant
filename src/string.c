@@ -21,7 +21,7 @@ void *memset(void *s, int c, size_t n)
   if ( s == NULL ) {
     return NULL;
   }
-  while ( ((int)d - (int)s) <= n ) {
+  while ( (d - (int *)s) <= n ) {
     *d = c;
     d += sizeof(int);
   }
@@ -59,7 +59,6 @@ int strncat(char *dest, char *src, size_t n)
 
 int strcmp(char *s1, char *s2)
 {
-  int d = 0;
   int s1len = 0;
 
   if ( s1 == NULL || s2 == NULL ) {
