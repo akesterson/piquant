@@ -15,6 +15,7 @@ char dtoa(int d)
   case 8: return '8'; break;
   case 9: return '9'; break;
   }
+  return NULL;
 }
 
 int atoi(char *nptr)
