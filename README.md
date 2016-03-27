@@ -31,6 +31,13 @@ You have to build it to run it. To build it, you need:
 
 To run it, you can use anything, but the makefile assumes you have 'bochs' installed.
 
-    make clean test
+    make clean run
 
 This will rebuild all of the sources and fire up the bochs emulator. Have fun.
+
+Developing & Testing
+=======
+
+To run the unit tests:
+
+    make test
