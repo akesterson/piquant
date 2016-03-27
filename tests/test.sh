@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for file in *.c
+for testfile in *.c
 do
-    filebase=$(basename $file | sed 's/\.c$//')
+    filebase=$(basename $testfile | sed 's/\.c$//')
     compile_def=$(cat <<EOF
 function shunittest_compile_${filebase} {
     set -e ; make ${filebase}.elf >&2 ; test -e ${filebase}.elf ; set +e
