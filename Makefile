@@ -5,15 +5,16 @@ endif
 all: boot.img kernel.bin
 
 src/%.o: src/%.c
-	bcc -ansi -0 -c -o $@ $<
+	gcc -c -m32 -masm=intel -ffreestanding -Wall -o $@ $<
 
-kernel.bin: src/screen.o src/conio.o src/string.o src/stdlib.o src/basic.o src/kernel.o
-	ld86 -d -M -o $@ $^ | tee ld86.out
+kernel.elf: src/screen.o src/conio.o src/string.o src/stdlib.o src/basic.o src/kernel.o
+	ld -static -nostdlib --nmagic -m elf_i386 -o $@ $^
+
+kernel.bin: kernel.elf
+	objcopy -O binary kernel.elf kernel.bin
 
 asm/kernel_syms.S: kernel.bin
-	cat ld86.out | \
-		grep -E "^\s+kernel\s+[a-zA-Z0-9_]+  0  [0-9]+" | \
-		python -c "import sys; print '\n'.join([\"_extern_c%s:\n    jmp 0x1000:0x%04x\" % (x.lstrip(' ').replace('kernel', '').lstrip(' ').split(' ')[0], int(x.lstrip(' ').replace('kernel', '').lstrip(' ').split(' ')[4], 16)) for x in sys.stdin.readlines()])" > asm/kernel_syms.S
+	./mk_kernel_syms.sh
 
 boot.bin: asm/kernel_syms.S asm/bootloader.S asm/bootloader.S
 	cd asm && nasm bootloader.S -f bin -o ../$@
@@ -36,4 +37,4 @@ test:
 
 .PHONY: clean
 clean:
-	rm -f boot.bin asm/*o src/*o
+	rm -f boot.bin kernel.elf kernel.bin asm/*o src/*o

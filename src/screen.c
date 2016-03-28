@@ -1,5 +1,6 @@
 #include "types.h"
 #include "screen.h"
+#include "conio.h"
 
 char _cursor_x = 0;
 char _cursor_y = 0;
@@ -18,20 +19,21 @@ void blankScreen(void)
 
 void setCursorPosition(char x, char y)
 {
-#asm
-  push bx;
-  mov bx, sp;
-  mov dl, [bx+4];
-  mov dh, [bx+6];
-  pop bx;
-  push ax;
-  push bx;
-  mov ah, #0x02;
-  mov bx, #0x0;
-  int 0x10;
-  pop bx;
-  pop ax;
-#endasm
+  __asm__ (
+	   "push bx;"
+	   "mov sp, bx;"
+	   "mov dl, %0;"
+	   "mov dh, %1;"
+	  : : "r" (x), "r" (y) );
+  __asm__(
+	  "pop bx;"
+	  "push ax;"
+	  "push bx;"
+	  "mov ah, 0x02;"
+	  "mov bx, 0x0;"
+	  "int 0x10;"
+	  "pop bx;"
+	  "pop ax;" : : );
   return;
 }
 

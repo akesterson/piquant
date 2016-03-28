@@ -67,7 +67,7 @@ _end_floppy_read:
 	mov ax, 0x1000
 	mov ss, ax
 	mov sp, 0xFFFF
-	jmp _extern_c_main
+	jmp _extern_c__start
 
 %include "libinterrupt.S"
 %include "kernel_syms.S"

@@ -4,18 +4,19 @@
 
 void _putch(char c)
 {
-#asm
-  push bx;
-  push ax;
-  mov bx, sp;
-  mov al, [bx+6];
-  mov ah, #0x0e;
-  mov bh, #0x00;
-  mov bl, #0x07;
-  int 0x10;
-  pop ax;
-  pop bx;
-#endasm
+  __asm__(
+	  "push bx;"
+	  "push ax;"
+	  "mov bx, sp;"
+	  "mov al, %0;"
+	  "mov ah, 0x0e;"
+	  "mov bh, 0x00;"
+	  "mov bl, 0x07;"
+	  "int 0x10;"
+	  "pop ax;"
+	  "pop bx;"
+	  : : "r" (c)
+	  );
     return;
 }
 
@@ -42,14 +43,14 @@ char _getkey(char *dest)
 {
   char echo;
   char scancode;
-#asm
-  push ax;
-  mov ah, #0x10;
-  int 0x16;
-  mov [bp-6], ah;
-  mov [bp-5], al;
-  pop ax;
-#endasm
+/* #asm */
+/*   push ax; */
+/*   mov ah, #0x10; */
+/*   int 0x16; */
+/*   mov [bp-6], ah; */
+/*   mov [bp-5], al; */
+/*   pop ax; */
+/* #endasm */
   *dest = echo;
   return scancode;
 }
