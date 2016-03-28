@@ -58,7 +58,7 @@ char *_tokenize(char *ptr, char *token)
   }
   memcpy((void *)&_tokenizer_value, (void *)orig, len); 
   _tokenizer_prev_next = (ptr + 1);
-  return &_tokenizer_value;
+  return (char *)&_tokenizer_value;
 }
 
 int basic_solve_expr(struct basic_expr *expr, struct basic_variable *result)

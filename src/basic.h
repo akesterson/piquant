@@ -58,6 +58,12 @@ struct basic_variable {
 
 extern int basic_errno;
 
+void _tokenizer_init(void);
+char *_tokenize(char *ptr, char *token);
+int basic_solve_expr(struct basic_expr *expr, struct basic_variable *result);
+struct basic_expr *basic_parse_expr(char *expbuf);
+void basic_print_var(struct basic_variable *var);
+
 void basic_repl(void);
 
 #endif /* _BASIC_H_ */
